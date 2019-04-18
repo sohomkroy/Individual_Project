@@ -7,7 +7,7 @@ left = 20
 # GPIO for right shutdown pin
 right = 16
 #GPIO for forward shutdown pin
-forward = 18
+forward = 21
 
 GPIO.setwarnings(False)
 

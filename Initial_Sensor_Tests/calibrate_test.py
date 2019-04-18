@@ -1,6 +1,19 @@
 import time
 import VL53L0X
 import RPi.GPIO as GPIO
+import numpy as np
+
+def removeOutliers(x, outlierConstant):
+    a = np.array(x)
+    upper_quartile = np.percentile(a, 75)
+    lower_quartile = np.percentile(a, 25)
+    IQR = (upper_quartile - lower_quartile) * outlierConstant
+    quartileSet = (lower_quartile - IQR, upper_quartile + IQR)
+    resultList = []
+    for y in a.tolist():
+        if y >= quartileSet[0] and y <= quartileSet[1]:
+            resultList.append(y)
+    return resultList
 
 # GPIO for left sensor shutdown pin
 left = 20
@@ -87,6 +100,9 @@ for count in range(1,101):
         print ("%d - Error" % tof_forward.my_object_number)
 
     time.sleep(timing/1000000.00)
+
+sample_distance_left = removeOutliers(sample_distance_left, 1.5)
+sample_distance_right = removeOutliers(sample_distance_right, 1.5)
 
 average_left = sum(sample_distance_left)/len(sample_distance_left)
 average_right = sum(sample_distance_right)/len(sample_distance_right)

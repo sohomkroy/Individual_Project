@@ -64,7 +64,6 @@ print("hit enter then walk forward until the next prompt")
 input()
 sample_distance_left = []
 sample_distance_right = []
-sample_distance_forward = []
 
 for count in range(1,101):
     left_distance = tof_left.get_distance()
@@ -84,7 +83,6 @@ for count in range(1,101):
     forward_distance = tof_right.get_distance()
     if (forward_distance > 0):
         print ("forward distance in mm is %d mm" % forward_distance)
-        sample_distance_forward.append(forward_distance)
     else:
         print ("%d - Error" % tof_forward.my_object_number)
 
@@ -92,15 +90,22 @@ for count in range(1,101):
 
 average_left = sum(sample_distance_left)/len(sample_distance_left)
 average_right = sum(sample_distance_right)/len(sample_distance_right)
-average_forward = sum(sample_distance_forward)/len(sample_distance_forward)
 
-min_left = min(sample_distance_left)
-min_right = min(sample_distance_right)
-min_forward = min(sample_distance_forward)
+min_left_measured = min(sample_distance_left)
+min_right_measured = min(sample_distance_right)
 
-max_left = max(sample_distance_left)
-max_right = max(sample_distance_right)
-max_forward = max(sample_distance_forward)
+max_left_measured = max(sample_distance_left)
+max_right_measured = max(sample_distance_right)
+
+min_left = average_left - 1.5*min_left_measured
+min_right = average_right - 1.5*min_right_measured
+
+max_left = average_left + 1.5*max_left_measured
+max_right = average_right + 1.5*max_right_measured
+
+with open('callibration.txt', 'a') as the_file:
+    the_file.write(min_left + '\n' + in_right + '\n')
+
 
 tof_left.stop_ranging()
 GPIO.output(left, GPIO.LOW)

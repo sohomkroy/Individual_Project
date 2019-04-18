@@ -120,7 +120,7 @@ max_left = average_left + 1.5*max_left_measured
 max_right = average_right + 1.5*max_right_measured
 
 with open('callibration.txt', 'a') as the_file:
-    the_file.write(min_left + '\n' + in_right + '\n')
+    the_file.write(min_left + '\n' + min_right + '\n' + max_left + '\n' + max_right + '\n')
 
 
 tof_left.stop_ranging()
